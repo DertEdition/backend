@@ -1,4 +1,4 @@
-package com.app.model.dto.medicine;
+package com.app.model.dto;
 
 import com.app.model.enums.DayOfWeek;
 import lombok.AllArgsConstructor;

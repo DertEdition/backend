@@ -1,6 +1,6 @@
 package com.app.controller;
 
-import com.app.model.dto.medicine.MedicineRequest;
+import com.app.model.dto.MedicineRequest;
 import com.app.model.entity.Medicine;
 import com.app.service.MedicineService;
 import lombok.RequiredArgsConstructor;

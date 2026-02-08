@@ -1,4 +1,4 @@
-package com.app.repository.medicine;
+package com.app.repository;
 
 import com.app.model.entity.Medicine;
 import com.app.model.enums.DayOfWeek;

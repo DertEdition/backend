@@ -4,7 +4,7 @@ import com.app.model.dto.auth.AuthResponse;
 import com.app.model.dto.auth.RegisterRequest;
 import com.app.model.dto.auth.LoginRequest;
 import com.app.model.entity.User;
-import com.app.repository.user.UserRepository;
+import com.app.repository.UserRepository;
 import com.app.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

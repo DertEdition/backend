@@ -1,11 +1,11 @@
 package com.app.service;
 
-import com.app.model.dto.medicine.MedicineRequest;
+import com.app.model.dto.MedicineRequest;
 import com.app.model.entity.Medicine;
 import com.app.model.entity.User;
 import com.app.model.enums.DayOfWeek;
-import com.app.repository.medicine.MedicineRepository;
-import com.app.repository.user.UserRepository;
+import com.app.repository.MedicineRepository;
+import com.app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
