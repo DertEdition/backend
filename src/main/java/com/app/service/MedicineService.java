@@ -22,12 +22,11 @@ public class MedicineService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Medicine createMedicine(MedicineRequest request) {
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı"));
+    public Medicine createMedicine(MedicineRequest request, User user) {
+        User managedUser = userRepository.getReferenceById(user.getId());
 
         Medicine medicine = Medicine.builder()
-                .user(user)
+                .user(managedUser)
                 .name(request.getName())
                 .dosage(request.getDosage())
                 .dayOfWeek(request.getDayOfWeek())

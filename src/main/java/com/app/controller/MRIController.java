@@ -5,6 +5,7 @@ import com.app.model.dto.UploadResponse;
 import com.app.model.entity.MRIImage;
 import com.app.model.entity.User;
 import com.app.repository.MRIRepository;
+import com.app.repository.UserRepository;
 import com.app.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class MRIController {
 
     private final S3Service s3Service;
     private final MRIRepository mriRepository;
+    private final UserRepository userRepository;
 
     @PostMapping("/upload")
     public ResponseEntity<UploadResponse> uploadMRI(
@@ -33,8 +35,10 @@ public class MRIController {
     ) {
         String s3Url = s3Service.uploadFile(file, currentUser.getId().toString(), bodyPart);
 
+        User managedUser = userRepository.getReferenceById(currentUser.getId());
+
         MRIImage mriImage = new MRIImage();
-        mriImage.setUser(currentUser);
+        mriImage.setUser(managedUser);
         mriImage.setBodyPart(bodyPart);
         mriImage.setFileUrl(s3Url);
         mriImage.setFileType(file.getContentType());

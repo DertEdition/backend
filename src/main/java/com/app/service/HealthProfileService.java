@@ -7,6 +7,8 @@ import com.app.repository.UserDetailsRepository;
 import com.app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,12 +17,16 @@ import java.util.Map;
 public class HealthProfileService {
 
     private final UserDetailsRepository userDetailsRepository;
+    private final UserRepository userRepository;
 
+    @Transactional
     public Map<String, Object> processProfile(HealthProfileRequest request, User currentUser) {
+        User managedUser = userRepository.getReferenceById(currentUser.getId());
+
         UserDetails userDetails = userDetailsRepository.findById(currentUser.getId())
                 .orElse(new UserDetails());
 
-        userDetails.setUser(currentUser);
+        userDetails.setUser(managedUser);
         userDetails.setWeight(request.getWeight());
         userDetails.setHeight(request.getHeight());
         userDetails.setWaist(request.getWaist());
