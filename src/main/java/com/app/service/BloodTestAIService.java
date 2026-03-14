@@ -18,14 +18,7 @@ public class BloodTestAIService {
     @Value("${ai.blood-test.api-url:}")
     private String aiApiUrl;
 
-    /**
-     * Kan testi belgesinin S3 URL'sini AI modeline gönderir ve analiz metnini döner.
-     *
-     * @param fileUrl S3'teki belge URL'si
-     * @return AI modelinin döndürdüğü analiz metni
-     */
     public String analyzeBloodTest(String fileUrl) {
-        // AI endpoint henüz hazır değilse stub yanıt dön
         if (aiApiUrl == null || aiApiUrl.isBlank()) {
             log.info("AI API URL yapılandırılmamış, stub yanıt döndürülüyor. fileUrl={}", fileUrl);
             return "AI analizi henüz yapılandırılmadı. Lütfen daha sonra tekrar deneyin.";
@@ -34,11 +27,9 @@ public class BloodTestAIService {
         try {
             RestTemplate restTemplate = new RestTemplate();
 
-            // AI modeline gönderilecek istek
             var request = new java.util.HashMap<String, String>();
             request.put("fileUrl", fileUrl);
 
-            // AI modelinden gelen yanıt
             var response = restTemplate.postForObject(aiApiUrl, request, AIAnalysisResponse.class);
 
             if (response != null && response.getResult() != null) {

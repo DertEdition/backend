@@ -32,13 +32,10 @@ public class BloodTestService {
     public BloodTest uploadAndAnalyze(MultipartFile file, User currentUser) {
         User managedUser = userRepository.getReferenceById(currentUser.getId());
 
-        // 1. S3'e yükle
         String s3Url = s3Service.uploadFile(file, currentUser.getId().toString(), "blood-test");
 
-        // 2. AI modeline PDF'i gönder
         String aiResultJson = sendToAIModel(file);
 
-        // 3. DB'ye kaydet
         BloodTest bloodTest = BloodTest.builder()
                 .user(managedUser)
                 .fileUrl(s3Url)

@@ -30,13 +30,8 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/api/auth/**").permitAll()
-//                        .requestMatchers("/api/location/**").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/api/listings/get-all", "/api/listings/{id}",
-//                                "/api/listings/house", "/api/listings/commercial",
-//                                "/api/listings/office", "/api/listings/industrial",
-//                                "/api/listings/service", "/api/listings/land").permitAll()
-                                .anyRequest().permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

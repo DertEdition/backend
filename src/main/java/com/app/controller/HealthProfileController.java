@@ -3,6 +3,7 @@ package com.app.controller;
 import com.app.model.dto.HealthProfileRequest;
 import com.app.model.entity.User;
 import com.app.service.HealthProfileService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,14 +14,14 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/health-profile")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*") // Frontend bağlantısı için
+@CrossOrigin(origins = "*")
 public class HealthProfileController {
 
     private final HealthProfileService service;
 
     @PostMapping
     public ResponseEntity<Map<String, Object>> createOrUpdateProfile(
-            @RequestBody HealthProfileRequest request,
+            @Valid @RequestBody HealthProfileRequest request,
             @AuthenticationPrincipal User currentUser) {
 
         Map<String, Object> response = service.processProfile(request, currentUser);

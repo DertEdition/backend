@@ -23,6 +23,13 @@ public class MedicineService {
 
     @Transactional
     public Medicine createMedicine(MedicineRequest request, User user) {
+        if (request.getName() == null || request.getName().isBlank()) {
+            throw new IllegalArgumentException("İlaç ismi boş olamaz");
+        }
+        if (request.getTime() == null || request.getTime().isBlank()) {
+            throw new IllegalArgumentException("Saat boş olamaz");
+        }
+
         User managedUser = userRepository.getReferenceById(user.getId());
 
         Medicine medicine = Medicine.builder()
@@ -49,6 +56,9 @@ public class MedicineService {
 
     @Transactional
     public void deleteMedicine(Long medicineId) {
+        if (!medicineRepository.existsById(medicineId)) {
+            throw new jakarta.persistence.EntityNotFoundException("Medicine not found with id: " + medicineId);
+        }
         medicineRepository.deleteById(medicineId);
     }
 
