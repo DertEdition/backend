@@ -10,6 +10,7 @@ import com.app.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -75,5 +76,17 @@ public class MRIController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(dtos);
+    }
+
+    @DeleteMapping("/delete")
+    @Transactional
+    public ResponseEntity<?> deleteMRI(@RequestParam String fileUrl, @AuthenticationPrincipal User currentUser) {
+        mriRepository.findByFileUrl(fileUrl).ifPresent(img -> {
+            if (img.getUser().getId().equals(currentUser.getId())) {
+                s3Service.deleteFile(fileUrl);
+                mriRepository.delete(img);
+            }
+        });
+        return ResponseEntity.ok().build();
     }
 }

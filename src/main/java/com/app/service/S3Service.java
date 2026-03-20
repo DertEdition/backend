@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 
 import java.util.UUID;
 
@@ -51,6 +53,21 @@ public class S3Service {
             );
         } catch (Exception e) {
             throw new RuntimeException("S3 upload failed: " + e.getMessage());
+        }
+    }
+
+    public void deleteFile(String fileUrl) {
+        try {
+            // URL'den Key'i ayıkla (Örn: "userId/bodyPart/filename.jpg")
+            // .com/ kısmından sonrasını alıyoruz
+            String key = fileUrl.substring(fileUrl.indexOf(".com/") + 5);
+
+            // AWS SDK v1 kullanımı:
+            s3Client.deleteObject(new DeleteObjectRequest(bucketName, key));
+
+            System.out.println("✅ S3 file deleted: " + key);
+        } catch (Exception e) {
+            System.err.println("❌ S3 delete error: " + e.getMessage());
         }
     }
 }
