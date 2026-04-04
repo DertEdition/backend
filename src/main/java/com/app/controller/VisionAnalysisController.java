@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -19,14 +18,23 @@ public class VisionAnalysisController {
     private final VisionAnalysisService visionAnalysisService;
 
     @PostMapping("/analyze-url")
-    public ResponseEntity<?> performAnalysisByUrl(@RequestBody Map<String, String> request) {
+    public ResponseEntity<?> performAnalysis(@RequestBody Map<String, String> request) {
         String imageUrl = request.get("imageUrl");
+        String type = request.get("type"); // "XRAY" veya "DERMATOLOGY"
 
         if (imageUrl == null || imageUrl.isEmpty()) {
             return ResponseEntity.badRequest().body("Görüntü URL'si boş olamaz.");
         }
 
-        VisionAnalysisResponse response = visionAnalysisService.analyzeImageUrl(imageUrl);
+        VisionAnalysisResponse response;
+
+        if ("DERMATOLOGY".equalsIgnoreCase(type)) {
+            response = visionAnalysisService.analyzeDermatologyImage(imageUrl);
+        } else if ("XRAY".equalsIgnoreCase(type)) {
+            response = visionAnalysisService.analyzeXrayImage(imageUrl);
+        } else {
+            response = visionAnalysisService.analyzeImageUrl(imageUrl);
+        }
 
         if (response == null) {
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Analiz yapılamadı.");
