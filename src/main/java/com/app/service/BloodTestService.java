@@ -26,7 +26,8 @@ public class BloodTestService {
     private final UserRepository userRepository;
     private final S3Service s3Service;
 
-    private static final String AI_API_URL = "http://localhost:8081/analyze";
+    @org.springframework.beans.factory.annotation.Value("${ai.blood-test.api-url:http://clinical-report:8081/analyze}")
+    private String aiApiUrl;
 
     @Transactional
     public BloodTest uploadAndAnalyze(MultipartFile file, User currentUser) {
@@ -82,7 +83,7 @@ public class BloodTestService {
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
             ResponseEntity<String> response = restTemplate.exchange(
-                    AI_API_URL,
+                    aiApiUrl,
                     HttpMethod.POST,
                     requestEntity,
                     String.class

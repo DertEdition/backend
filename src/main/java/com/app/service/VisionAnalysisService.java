@@ -15,16 +15,18 @@ public class VisionAnalysisService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    private static final String PYTHON_BASE_URL = "http://localhost:8000/analyze/medical";
-    private static final String XRAY_ENDPOINT = PYTHON_BASE_URL + "/chest-xray/upload";
-    private static final String DERMATOLOGY_ENDPOINT = PYTHON_BASE_URL + "/dermatology/upload";
+    @org.springframework.beans.factory.annotation.Value("${ai.vision.api-url:http://vision:8000}")
+    private String visionBaseUrl;
+
+    private String getXrayEndpoint() { return visionBaseUrl + "/analyze/medical/chest-xray/upload"; }
+    private String getDermatologyEndpoint() { return visionBaseUrl + "/analyze/medical/dermatology/upload"; }
 
     public VisionAnalysisResponse analyzeXrayImage(String imageUrl) {
-        return processImageAnalysis(imageUrl, XRAY_ENDPOINT);
+        return processImageAnalysis(imageUrl, getXrayEndpoint());
     }
 
     public VisionAnalysisResponse analyzeDermatologyImage(String imageUrl) {
-        return processImageAnalysis(imageUrl, DERMATOLOGY_ENDPOINT);
+        return processImageAnalysis(imageUrl, getDermatologyEndpoint());
     }
 
     public VisionAnalysisResponse analyzeImageUrl(String imageUrl) {
